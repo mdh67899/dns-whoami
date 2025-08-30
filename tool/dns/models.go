@@ -19,8 +19,8 @@ type InternetInfomation struct {
 	PublicIpAddress string   // 监测工具所使用的公共dns服务器解析到的公网出口ip
 	PublicLocalDns  string   // 监测工具所在网络的互联网服务商localdns
 
-	TraceInfo  resty.TraceInfo // 监测工具所使用的dns监测工具提供商的请求追踪信息
-	DetectData string          // 监测工具返回的原始数据
+	TraceInfo  resty.TraceInfo `json:"-"` // 监测工具所使用的dns监测工具提供商的请求追踪信息
+	DetectData string          `json:"-"` // 监测工具返回的原始数据
 }
 
 func (i *InternetInfomation) ToJsonString() string {

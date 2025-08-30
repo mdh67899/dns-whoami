@@ -12,6 +12,13 @@ var (
 )
 
 func main() {
+	akahelpData, err := dns.NewAkahelpProvider().GetMyInternetInfomation()
+	if err != nil {
+		log.Error(err)
+	} else {
+		log.Info(akahelpData.ToJsonString())
+	}
+
 	data, err := dns.NewNetEaseProvider().GetMyInternetInfomation()
 	if err != nil {
 		log.Error(err)
