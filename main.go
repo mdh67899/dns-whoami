@@ -18,4 +18,11 @@ func main() {
 	} else {
 		log.Info(data.ToJsonString())
 	}
+
+	aliData, err := dns.NewAliyunProvider().GetMyInternetInfomation()
+	if err != nil {
+		log.Error(err)
+	} else {
+		log.Info(aliData.ToJsonString())
+	}
 }

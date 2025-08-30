@@ -78,7 +78,12 @@ func (p *NetEaseProvider) GetMyInternetInfomation() (*InternetInfomation, error)
 
 	resultList := strings.Split(string(body), "<br>")
 
-	data := &InternetInfomation{}
+	data := &InternetInfomation{
+		Provider:   p.Provider(),
+		TraceInfo:  newResp.Request.TraceInfo(),
+		DetectData: string(body),
+	}
+
 	for idx, _ := range resultList {
 		switch {
 		case strings.Contains(resultList[idx], "您的IP地址信息"):
