@@ -2,14 +2,15 @@ package dns
 
 import (
 	"encoding/json"
+	"net"
+	"whoami/pkg"
 
 	"github.com/go-resty/resty/v2"
-	"go.uber.org/zap"
+	"github.com/miekg/dns"
 )
 
 var (
-	logger, _ = zap.NewProduction()
-	log       = logger.Sugar()
+	log = pkg.AppLog
 )
 
 type InternetInfomation struct {
@@ -26,4 +27,41 @@ type InternetInfomation struct {
 func (i *InternetInfomation) ToJsonString() string {
 	data, _ := json.Marshal(i)
 	return string(data)
+}
+
+func NewInternetInfomationFromLocal() *InternetInfomation {
+	// 1. 读取系统的本地 DNS 配置
+	config, err := dns.ClientConfigFromFile("/etc/resolv.conf")
+	if err != nil {
+		log.Errorf("读取 resolv.conf 失败: %v", err)
+		return &InternetInfomation{}
+	}
+	if len(config.Servers) == 0 {
+		log.Warnf("读取 resolv.conf 失败: %v", err)
+		return &InternetInfomation{}
+	}
+
+	retData := &InternetInfomation{
+		Provider:  "local",
+		DnsServer: config.Servers,
+	}
+
+	// 2. 读取本地网卡的 IP 地址
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		log.Errorf("net.InterfaceAddrs 失败: %v", err)
+		return retData
+	}
+
+	for _, addr := range addrs {
+		// 取出 IP 地址
+		if ipNet, ok := addr.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
+			// 只要 IPv4
+			if ipNet.IP.To4() != nil {
+				retData.IpAddress = ipNet.IP.String()
+			}
+		}
+	}
+
+	return retData
 }

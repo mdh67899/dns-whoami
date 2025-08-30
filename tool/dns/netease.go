@@ -78,11 +78,11 @@ func (p *NetEaseProvider) GetMyInternetInfomation() (*InternetInfomation, error)
 
 	resultList := strings.Split(string(body), "<br>")
 
-	data := &InternetInfomation{
-		Provider:   p.Provider(),
-		TraceInfo:  newResp.Request.TraceInfo(),
-		DetectData: string(body),
-	}
+	data := NewInternetInfomationFromLocal()
+
+	data.Provider = p.Provider()
+	data.TraceInfo = newResp.Request.TraceInfo()
+	data.DetectData = string(body)
 
 	for idx, _ := range resultList {
 		switch {

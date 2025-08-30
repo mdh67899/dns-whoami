@@ -1,14 +1,12 @@
 package main
 
 import (
+	"whoami/pkg"
 	"whoami/tool/dns"
-
-	"go.uber.org/zap"
 )
 
 var (
-	logger, _ = zap.NewProduction()
-	log       = logger.Sugar()
+	log = pkg.AppLog
 )
 
 func main() {

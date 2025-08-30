@@ -42,11 +42,10 @@ func (a *AkahelpProvider) GetMyInternetInfomation() (*InternetInfomation, error)
 
 	answerData, _ := json.Marshal(in)
 
-	retData := &InternetInfomation{
-		Provider: a.Provider(),
+	retData := NewInternetInfomationFromLocal()
 
-		DetectData: string(answerData),
-	}
+	retData.Provider = a.Provider()
+	retData.DetectData = string(answerData)
 
 	// 4. 打印结果
 	for _, ans := range in.Answer {

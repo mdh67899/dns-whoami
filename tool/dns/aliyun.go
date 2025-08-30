@@ -81,13 +81,13 @@ func (a *AliyunProvider) GetMyInternetInfomation() (*InternetInfomation, error) 
 		return nil, errors.Wrapf(err, "failed to unmarshal response body: %s", string(respBody))
 	}
 
-	retData := &InternetInfomation{
-		Provider:        a.Provider(),
-		PublicIpAddress: result.Content.LocalIP,
-		PublicLocalDns:  result.Content.LDNS,
-		TraceInfo:       resp.Request.TraceInfo(),
-		DetectData:      string(respBody),
-	}
+	retData := NewInternetInfomationFromLocal()
+
+	retData.Provider = a.Provider()
+	retData.PublicIpAddress = result.Content.LocalIP
+	retData.PublicLocalDns = result.Content.LDNS
+	retData.TraceInfo = resp.Request.TraceInfo()
+	retData.DetectData = string(respBody)
 
 	return retData, nil
 }
