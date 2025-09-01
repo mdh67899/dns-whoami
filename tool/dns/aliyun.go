@@ -17,7 +17,7 @@ func NewAliyunProvider() *AliyunProvider {
 }
 
 func (a *AliyunProvider) Provider() string {
-	return "NetEase"
+	return "aliyun"
 }
 
 type AliDnsDetectResponse struct {
