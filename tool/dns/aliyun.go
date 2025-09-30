@@ -35,6 +35,26 @@ type AliDnsDetectResponse struct {
 	} `json:"content"`
 }
 
+// GetMyInternetInfomation 从阿里云 CDN 检测接口获取当前互联网连接信息。
+//
+// 该方法通过调用阿里云的 DNS 检测接口，获取当前设备的公网 IP 地址、本地 DNS 服务器信息、
+// 运营商及地理位置等数据，并封装为 InternetInfomation 结构体返回。
+//
+// 返回：
+//   - *InternetInfomation: 包含公网 IP、本地 DNS、运营商等信息的结构体。
+//   - error: 如果请求或解析过程中发生错误，返回错误信息。
+//
+// 注意：
+//   - 该方法依赖于阿里云的 DNS 检测接口，需要确保网络连接正常。
+//   - 返回的 InternetInfomation 结构体中包含请求的 Trace 信息和原始响应数据，便于调试。
+//
+// 示例：
+//
+//	info, err := provider.GetMyInternetInfomation()
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//	fmt.Printf("Public IP: %s\n", info.PublicIpAddress)
 func (a *AliyunProvider) GetMyInternetInfomation() (*InternetInfomation, error) {
 	//https://be149f43-ceec-4199-9710-cdafed1df369.dns-detect.alicdn.com/api/detect/DescribeDNSLookup?cb=jQuery110109824510113197696_1756536536791&_=1756536536792
 	aliDnsDelectUrlTpl := fmt.Sprintf("https://%s.dns-detect.alicdn.com/api/detect/DescribeDNSLookup?_=%d", uuid.New().String(), time.Now().UnixMilli())
